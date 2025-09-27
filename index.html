@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>LCG Finder</title>
+</head>
+<body style="font-family: Arial; direction: rtl;">
+
+<h2>حساب LCG</h2>
+<p>أدخل سلسلة أرقام (مفصولة بفواصل):</p>
+<input type="text" id="sequence" value="24,23,21,19,35,18" style="width:300px;">
+<br><br>
+<button onclick="findLCG()">احسب</button>
+
+<h3>النتيجة:</h3>
+<pre id="output"></pre>
+
+<script>
+function findLCG() {
+    let seq = document.getElementById("sequence").value.split(",").map(x => parseInt(x.trim()));
+    let m = 37; // الأرقام بين 0 و 36
+    let solutions = [];
+
+    for (let a = 0; a < m; a++) {
+        for (let c = 0; c < m; c++) {
+            let ok = true;
+            for (let i = 0; i < seq.length - 1; i++) {
+                if ((a * seq[i] + c) % m !== seq[i + 1]) {
+                    ok = false;
+                    break;
+                }
+            }
+            if (ok) solutions.push([a, c]);
+        }
+    }
+
+    let out = "";
+    if (solutions.length > 0) {
+        out += "الحلول (a, c):\n";
+        for (let s of solutions) {
+            out += "a=" + s[0] + ", c=" + s[1] + "\n";
+        }
+        let nextNum = (solutions[0][0] * seq[seq.length-1] + solutions[0][1]) % m;
+        out += "\nالقيمة التالية = " + nextNum;
+    } else {
+        out = "ما فماش حل متناسق مع LCG.";
+    }
+
+    document.getElementById("output").innerText = out;
+}
+</script>
+
+</body>
+</html>
